@@ -5,11 +5,6 @@ class BlockingView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Column(
-        children: [
-          Expanded(
-              child: Center(
-            child: Text('View'),
-          ))
-        ],
+        children: [Expanded(child: Center(child: Text('Loading...')))],
       );
 }

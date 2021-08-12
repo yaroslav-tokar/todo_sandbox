@@ -13,4 +13,10 @@ class NoteModel extends BaseNote {
         title: title,
         content: content,
       );
+
+  @override
+  String toString() => '[category: $category, '
+      'id: $id, '
+      'title: $title, '
+      'content: $content]';
 }

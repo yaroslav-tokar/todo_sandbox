@@ -5,21 +5,23 @@ import 'package:todo_sandbox/view/blocking_view.dart';
 import 'package:todo_sandbox/view/progress_view.dart';
 import 'package:todo_sandbox/view/reloadable_error_view.dart';
 
-class BaseScreenView<T extends BaseModel> extends StatelessWidget {
+class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
   final bool hasToolbar;
   final String title;
   final bool hasBackBtn;
   final Widget content;
+  final ScreenViewState screenViewState;
 
-  final T model;
+  final T block;
 
   const BaseScreenView({
     Key? key,
     required this.hasBackBtn,
-    required this.model,
+    required this.block,
     required this.hasToolbar,
     required this.title,
     required this.content,
+    this.screenViewState = ScreenViewState.ready,
   }) : super(key: key);
 
   @override
@@ -43,21 +45,22 @@ class BaseScreenView<T extends BaseModel> extends StatelessWidget {
   }
 
   Widget _buildScreenContent() => StreamBuilder<ScreenViewState>(
-      initialData: ScreenViewState.ready,
-      stream: model.screenViewState,
+      initialData: screenViewState,
+      stream: block.screenViewState,
       builder: (context, snapshot) {
         Widget bodyContent = SizedBox.shrink();
+
         switch (snapshot.data) {
           case ScreenViewState.ready:
-            bodyContent = Stack(
-              children: [content, _buildProgressView()],
-            );
+            bodyContent = Stack(children: [content, _buildProgressView()]);
             break;
           case ScreenViewState.not_ready:
             bodyContent = BlockingView();
             break;
           case ScreenViewState.error:
-            bodyContent = BlockingErrorView(onReloadBtnClicked: () => null);
+            bodyContent = RetryView(
+              onReloadBtnClicked: () => block.lastCallableFunction?.call(),
+            );
             break;
         }
 
@@ -66,7 +69,7 @@ class BaseScreenView<T extends BaseModel> extends StatelessWidget {
 
   Widget _buildProgressView() => StreamBuilder<ProgressViewState>(
       initialData: ProgressViewState.idle,
-      stream: model.progressViewState,
+      stream: block.progressViewState,
       builder: (context, snapshot) => snapshot.data == ProgressViewState.busy
           ? ProgressView()
           : SizedBox.shrink());

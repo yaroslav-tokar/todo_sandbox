@@ -12,7 +12,7 @@ class NoteScreen extends StatefulWidget {
 
 class _NoteScreenState extends State<NoteScreen> {
   @override
-  Widget build(BuildContext context) => BaseScreen<NoteStatefulModel>(
+  Widget build(BuildContext context) => BaseStatefulScreen<NoteStatefulModel>(
       onModelReady: (model) => locator<NoteStatefulModel>(),
       builder: (context, model, child) {
         return Container(color: Colors.blue);

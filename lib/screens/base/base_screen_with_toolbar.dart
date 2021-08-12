@@ -10,7 +10,7 @@ class BaseScreenWithToolbar extends StatefulWidget {
 
 class _BaseScreenWithToolbarState extends State<BaseScreenWithToolbar> {
   @override
-  Widget build(BuildContext context) => BaseScreen(
+  Widget build(BuildContext context) => BaseStatefulScreen(
       onModelReady: (model) => null,
       builder: (context, model, child) => Container(color: Colors.blueAccent));
 }

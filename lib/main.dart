@@ -1,13 +1,12 @@
 import 'dart:io';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:todo_sandbox/core/model/dbo/note_dbo.dart';
 import 'package:todo_sandbox/di/di.dart';
 import 'package:todo_sandbox/screens/app.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:todo_sandbox/util/logger.dart';
-import 'package:todo_sandbox/core/model/dbo/note_dbo.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
