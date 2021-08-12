@@ -1,14 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:todo_sandbox/core/enums.dart';
 import 'package:todo_sandbox/util/logger.dart';
 
-enum ViewState { idle, busy }
 
 class BaseStatefulModel extends ChangeNotifier {
-  ViewState _viewState = ViewState.busy;
+  ScreenViewState _viewState = ScreenViewState.ready;
 
-  final _viewStateController = StreamController<ViewState>();
+  final _viewStateController = StreamController<ScreenViewState>();
 
   void consumeLoadableCall(Function callable) async {
     onBusy();
@@ -16,15 +16,15 @@ class BaseStatefulModel extends ChangeNotifier {
     onIdle();
   }
 
-  void setViewState(ViewState viewState) {
+  void setViewState(ScreenViewState viewState) {
     _updateViewState(viewState);
   }
 
-  onIdle() => _updateViewState(ViewState.idle);
+  onIdle() => _updateViewState(ScreenViewState.ready);
 
-  onBusy() => _updateViewState(ViewState.busy);
+  onBusy() => _updateViewState(ScreenViewState.ready);
 
-  _updateViewState(ViewState viewState) {
+  _updateViewState(ScreenViewState viewState) {
     Logger.i('ViewState\t$viewState');
     this._viewState = viewState;
     notifyListeners();
@@ -36,5 +36,5 @@ class BaseStatefulModel extends ChangeNotifier {
     _viewStateController.close();
   }
 
-  ViewState get viewState => _viewState;
+  ScreenViewState get viewState => _viewState;
 }

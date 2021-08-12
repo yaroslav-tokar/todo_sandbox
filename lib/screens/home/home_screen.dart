@@ -12,7 +12,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends BaseStateWithModel<HomeModel, HomeScreen> {
-
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeModel>(
       hasBackBtn: false,
@@ -22,5 +21,14 @@ class _HomeScreenState extends BaseStateWithModel<HomeModel, HomeScreen> {
       title: 'Notes');
 
   @override
-  Widget? buildBody() => Container(child: Container(color: Colors.green));
+  Widget? buildBody() => Container(
+          child: Column(
+        children: [
+          Center(
+              child: ElevatedButton(
+            onPressed: statefulModel.makeRequest,
+            child: Text('press to load'),
+          ))
+        ],
+      ));
 }
