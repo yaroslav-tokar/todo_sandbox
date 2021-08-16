@@ -18,18 +18,23 @@ dependencies:
   json_annotation:
   local_auth:
   hive: ^2.0.4
-  hive_flutter: ^1.1.0
+#  hive_flutter: ^1.1.0
   firebase_core: 1.4.0
   rxdart:
   google_fonts: 2.1.0
+  equatable: 2.0.3
+  floor: ^1.1.0
 
 dev_dependencies:
+  floor_generator: ^1.1.0
   flutter_test:
     sdk: flutter
   build_runner:
   json_serializable:
   retrofit_generator:
-  hive_generator: ^1.1.0
+#  hive_generator: ^1.1.0
+  lint: ^1.6.0
+
 
 flutter:
   uses-material-design: true
