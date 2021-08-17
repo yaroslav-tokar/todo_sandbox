@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:todo_sandbox/presentation/screens/home/home_screen.dart';
+import 'package:todo_sandbox/presentation/screens/note/note_details_screen.dart';
 
 extension AppRouteEx on AppRoute {
   String get value {
     switch (this) {
-      case AppRoute.HOME:
+      case AppRoute.noteDetails:
+        return '/note_details';
+      case AppRoute.home:
         return '/';
-      case AppRoute.AUTH:
+      case AppRoute.auth:
         return '/auth';
       default:
         throw Exception('No route with name *$this found.');
@@ -20,14 +23,14 @@ class Router {
       case '/':
       case '/home':
       case '/auth':
-        return MaterialPageRoute(builder: (_) => HomeScreen());
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case '/note_details':
+        return MaterialPageRoute(
+            builder: (BuildContext context) => const NoteDetailsScreen());
       default:
         throw Exception('No route with name *${settings.name} found.');
     }
   }
 }
 
-enum AppRoute {
-  HOME,
-  AUTH,
-}
+enum AppRoute { home, auth, noteDetails }

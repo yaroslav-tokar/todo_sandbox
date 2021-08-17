@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:todo_sandbox/custom_view/blocking_view.dart';
-import 'package:todo_sandbox/custom_view/progress_view.dart';
-import 'package:todo_sandbox/custom_view/reloadable_error_view.dart';
 import 'package:todo_sandbox/data/enums.dart';
 import 'package:todo_sandbox/presentation/block/base_block.dart';
-
+import 'package:todo_sandbox/presentation/custom_view/blocking_view.dart';
+import 'package:todo_sandbox/presentation/custom_view/progress_view.dart';
+import 'package:todo_sandbox/presentation/custom_view/reloadable_error_view.dart';
 
 class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
   final bool hasToolbar;
@@ -13,6 +12,7 @@ class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
   final Widget content;
   final ScreenViewState screenViewState;
   final bool canPop;
+  final VoidCallback? onFloatingActionButtonTapped;
 
   final T block;
 
@@ -25,6 +25,7 @@ class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
     required this.content,
     this.screenViewState = ScreenViewState.ready,
     this.canPop = true,
+    this.onFloatingActionButtonTapped,
   }) : super(key: key);
 
   @override
@@ -37,30 +38,37 @@ class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
 
     final Widget scaffold = Scaffold(
         appBar: appBar,
+        floatingActionButton: _buildFloatingActionButton(),
         body: Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: screenContent,
             )
           ],
-          mainAxisSize: MainAxisSize.max,
         ));
 
-    return WillPopScope(child: scaffold, onWillPop: () async => canPop);
+    return WillPopScope(onWillPop: () async => canPop, child: scaffold);
   }
+
+  Widget _buildFloatingActionButton() => onFloatingActionButtonTapped != null
+      ? FloatingActionButton(
+          onPressed: () => onFloatingActionButtonTapped?.call(),
+          child: const Icon(Icons.add),
+        )
+      : const SizedBox.shrink();
 
   Widget _buildScreenContent() => StreamBuilder<ScreenViewState>(
       initialData: screenViewState,
       stream: block.screenViewState,
-      builder: (context, snapshot) {
-        Widget bodyContent = SizedBox.shrink();
+      builder: (BuildContext context, AsyncSnapshot<ScreenViewState> snapshot) {
+        Widget bodyContent = const SizedBox.shrink();
 
         switch (snapshot.data) {
           case ScreenViewState.ready:
             bodyContent = Stack(children: [content, _buildProgressView()]);
             break;
           case ScreenViewState.notReady:
-            bodyContent = BlockingView();
+            bodyContent = const BlockingView();
             break;
           case ScreenViewState.error:
             bodyContent = RetryView(
@@ -75,9 +83,11 @@ class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
   Widget _buildProgressView() => StreamBuilder<ProgressViewState>(
       initialData: ProgressViewState.idle,
       stream: block.progressViewState,
-      builder: (context, snapshot) => snapshot.data == ProgressViewState.busy
-          ? ProgressView()
-          : SizedBox.shrink());
+      builder:
+          (BuildContext context, AsyncSnapshot<ProgressViewState> snapshot) =>
+              snapshot.data == ProgressViewState.busy
+                  ? const ProgressView()
+                  : const SizedBox.shrink());
 
   AppBar _buildAppBar() => AppBar(title: Text(title));
 }

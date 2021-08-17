@@ -12,7 +12,6 @@ import 'package:todo_sandbox/presentation/block/home_block.dart';
 
 final GetIt locator = GetIt.instance;
 
-//TODO fix di issue: currently ioc container does not create dependencies for
 // repositories
 Future<void> setupDi() async {
   //Register db instance

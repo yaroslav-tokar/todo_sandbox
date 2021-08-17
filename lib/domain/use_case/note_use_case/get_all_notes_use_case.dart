@@ -4,8 +4,7 @@ import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/domain/entities/note_request_params.dart';
 import 'package:todo_sandbox/domain/repositories/note_repository.dart';
 
-class GetAllNotesUseCase
-    implements UseCase<DataState<List<NoteModel>>, NoteRequestParams> {
+class GetAllNotesUseCase implements UseCase<DataState<List<NoteModel>>, NoteRequestParams> {
   final NoteRepository _noteRepository;
 
   GetAllNotesUseCase(this._noteRepository);
