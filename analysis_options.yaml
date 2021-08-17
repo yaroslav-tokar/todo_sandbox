@@ -3,7 +3,7 @@ include: package:lint/analysis_options.yaml
 linter:
   rules:
     always_specify_types: true
-    lines_longer_than_80_chars: true
+    lines_longer_than_80_chars: false
     always_use_package_imports: true
     always_declare_return_types: true
     avoid_renaming_method_parameters: true

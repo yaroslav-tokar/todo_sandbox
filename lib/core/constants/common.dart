@@ -1,0 +1,1 @@
+const String applicationDatabaseName = 'app_db';
