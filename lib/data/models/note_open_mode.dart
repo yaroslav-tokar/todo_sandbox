@@ -1,0 +1,1 @@
+enum NoteOpenMode { create, update }

@@ -14,9 +14,8 @@ Future<void> main() async {
 }
 
 Future<void> _initDb() async {
-  try {
-  } catch (e) {
-    Logger.e('Cant init Hive, cause\t$e');
+  try {} catch (e) {
+    logError('Cant init Hive, cause\t$e');
   }
 }
 

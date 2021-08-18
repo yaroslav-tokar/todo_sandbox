@@ -25,7 +25,7 @@ class BaseStatefulModel extends ChangeNotifier {
   void onBusy() => _updateViewState(ScreenViewState.ready);
 
   void _updateViewState(ScreenViewState viewState) {
-    Logger.i('ViewState\t$viewState');
+    logInfo('ViewState\t$viewState');
     _viewState = viewState;
     notifyListeners();
     // _viewStateController.add(_viewState);

@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:todo_sandbox/config/route/router.dart';
 
-class Nav {
-  static final Nav I = Nav._();
+class Navigation {
+  static final Navigation I = Navigation._();
 
-  factory Nav() => I;
+  factory Navigation() => I;
 
-  Nav._();
+  Navigation._();
 
   static final GlobalKey<NavigatorState> navigatorKey =
       GlobalKey<NavigatorState>();

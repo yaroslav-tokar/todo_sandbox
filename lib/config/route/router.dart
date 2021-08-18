@@ -23,9 +23,11 @@ class Router {
       case '/':
       case '/home':
       case '/auth':
-        return MaterialPageRoute(builder: (_) => const HomeScreen());
+        return MaterialPageRoute(
+            settings: settings, builder: (BuildContext context) => const HomeScreen());
       case '/note_details':
         return MaterialPageRoute(
+            settings: settings,
             builder: (BuildContext context) => const NoteDetailsScreen());
       default:
         throw Exception('No route with name *${settings.name} found.');

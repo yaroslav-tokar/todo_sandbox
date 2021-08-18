@@ -1,8 +1,8 @@
-class Logger {
-  static final _defaultLogInfoTag = 'debug_info';
-  static final _defaultLogErrorTag = 'debug_error';
+const String _defaultLogInfoTag = 'debug_info';
+const String _defaultLogErrorTag = 'debug_error';
 
-  static i(String message) => print('$_defaultLogInfoTag\t$message');
+Future<void> logInfo(String message) async =>
+    print('$_defaultLogInfoTag\t$message');
 
-  static e(String message) => print('$_defaultLogErrorTag\t$message');
-}
+Future<void> logError(String message) async =>
+    print('$_defaultLogErrorTag\t$message');

@@ -3,21 +3,27 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:todo_sandbox/core/resourses/data_state.dart';
 import 'package:todo_sandbox/core/usecase/use_case.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/enums.dart';
+import 'package:todo_sandbox/data/models/note_details_model.dart';
 import 'package:todo_sandbox/data/network/api_components.dart';
+import 'package:todo_sandbox/presentation/arguments/screen_arguments.dart';
 
 typedef OnSuccess = Function<T>(T? data);
 typedef OnError = Function(ResponseError errorMessage);
 typedef OnDone = Function();
 
-class BaseBlock {
+abstract class BaseBlock<A extends ScreenArguments> {
   Function? lastCallableFunction;
+  A? _attachedArguments;
 
   ScreenViewState _screenViewState = ScreenViewState.ready;
   ProgressViewState _progressViewState = ProgressViewState.idle;
 
   final _screenViewStateSc = StreamController<ScreenViewState>.broadcast();
   final _progressViewStateSc = StreamController<ProgressViewState>.broadcast();
+
+  void attachArguments({A? args});
 
   //Progress events
   @protected

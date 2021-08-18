@@ -13,27 +13,27 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends BaseStateWithModel<HomeBlock, HomeScreen> {
+class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
   void initState() {
     super.initState();
-    statefulModel.fetchNotes();
+    block.fetchNotes();
   }
 
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       hasBackBtn: false,
-      block: statefulModel,
+      block: block,
       hasToolbar: true,
-      onFloatingActionButtonTapped: statefulModel.onFloatingActionButtonClicked,
-      content: buildBody()!,
+      onFloatingActionButtonTapped: block.onFloatingActionButtonClicked,
+      content: buildBody,
       title: 'Notes');
 
   @override
-  Widget? buildBody() => Column(children: <Widget>[_buildNoteList()]);
+  Widget get buildBody => Column(children: <Widget>[_buildNoteList()]);
 
   Widget _buildNoteList() => StreamBuilder<List<NoteModel>>(
-      stream: statefulModel.noteListStream,
+      stream: block.noteListStream,
       initialData: [],
       builder: (BuildContext context, AsyncSnapshot<List<NoteModel>> snapshot) {
         return ListView.separated(
@@ -42,7 +42,7 @@ class _HomeScreenState extends BaseStateWithModel<HomeBlock, HomeScreen> {
             itemBuilder: (BuildContext context, int index) => NoteView(
                   model: snapshot.data![index],
                   onClicked: () =>
-                      statefulModel.onNoteTapped(snapshot.data![index]),
+                      block.onNoteTapped(snapshot.data![index]),
                 ),
             separatorBuilder: (BuildContext context, int index) =>
                 Container(height: 24));
