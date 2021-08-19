@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todo_sandbox/presentation/di/di.dart';
-import 'package:todo_sandbox/presentation/view_model/base_stateful_model.dart';
+import 'package:todo_sandbox/presentation/stateful_models/base_stateful_model.dart';
 
 class BaseNotifiableScreen<T extends BaseStatefulModel> extends StatefulWidget {
   final Widget Function(BuildContext context, T value, Widget? child) builder;
