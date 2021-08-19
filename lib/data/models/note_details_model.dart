@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:todo_sandbox/core/util/logger.dart';
+import 'package:todo_sandbox/data/models/note_model.dart';
+import 'package:todo_sandbox/data/models/note_open_mode.dart';
 import 'package:todo_sandbox/domain/provider/note_local_data_provider.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
 import 'package:todo_sandbox/presentation/block/base/base_bloc_with_arguments.dart';
@@ -15,6 +16,7 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
   Future<void> onSubmitButtonTapped() async {
     final String title = _titleEtc.text;
     final String content = _titleEtc.text;
+
   }
 
   @override
@@ -25,6 +27,10 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
   @override
   void attachArguments({NoteDetailsArgument? args}) {
     arguments = args;
-    logInfo('NoteDetails args\t$arguments');
+
+    if (arguments != null) {
+      updateToolbarTitle(
+          arguments!.mode.isCrateMode ? 'Create new note' : 'Note details');
+    }
   }
 }

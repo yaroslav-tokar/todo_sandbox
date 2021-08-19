@@ -16,8 +16,8 @@ class _NoteDetailsScreenState extends BaseStateWithArguments<NoteDetailsBloc,
   @override
   Widget build(BuildContext context) => BaseScreenView<NoteDetailsBloc>(
       hasBackBtn: false,
-      block: block,
-      hasToolbar: false,
+      bloc: block,
+      hasToolbar: true,
       title: 'Note details',
       content: buildBody);
 

@@ -23,7 +23,7 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       hasBackBtn: false,
-      block: block,
+      bloc: block,
       hasToolbar: true,
       onFloatingActionButtonTapped: block.onFloatingActionButtonClicked,
       content: buildBody,

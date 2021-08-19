@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
+import 'package:todo_sandbox/config/mixin/toolbar_config_mixin.dart';
 import 'package:todo_sandbox/core/resourses/data_state.dart';
 import 'package:todo_sandbox/core/usecase/use_case.dart';
 import 'package:todo_sandbox/core/util/logger.dart';
@@ -13,7 +14,7 @@ typedef OnSuccess = Function<T>(T? data);
 typedef OnError = Function(ResponseError errorMessage);
 typedef OnDone = Function();
 
-abstract class BaseBloc {
+abstract class BaseBloc with ToolbarConfigMixin {
   Function? lastCallableFunction;
 
   ScreenViewState _screenViewState = ScreenViewState.ready;
@@ -82,12 +83,10 @@ abstract class BaseBloc {
     lastCallableFunction?.call();
   }
 
-  Future<void> consumeApiCall(Future? apiCall) async {
-    // lastCallableFunction = apiCall;
-  }
 
   @mustCallSuper
   void dispose() {
+    disposeToolbar();
     _screenViewStateSc.close();
     _progressViewStateSc.close();
     lastCallableFunction = null;
