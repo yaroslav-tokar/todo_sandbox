@@ -84,7 +84,6 @@ abstract class BaseBloc with ToolbarConfigMixin {
   }
 
 
-  @mustCallSuper
   void dispose() {
     disposeToolbar();
     _screenViewStateSc.close();
