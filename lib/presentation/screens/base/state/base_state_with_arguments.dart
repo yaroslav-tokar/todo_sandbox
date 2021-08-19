@@ -16,13 +16,13 @@ abstract class BaseStateWithArguments<
   void onAttachBloc() {
     WidgetsBinding.instance?.addPostFrameCallback((Duration timeStamp) {
       final A? _arguments = ModalRoute.of(context)?.settings.arguments as A?;
-      block.attachArguments(args: _arguments);
+      bloc.attachArguments(args: _arguments);
     });
   }
 
   @override
   void dispose() {
-    block.dispose();
+    bloc.dispose();
     super.dispose();
   }
 }

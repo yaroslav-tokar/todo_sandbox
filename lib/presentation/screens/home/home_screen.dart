@@ -17,15 +17,15 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
   void initState() {
     super.initState();
-    block.fetchNotes();
+    bloc.fetchNotes();
   }
 
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       hasBackBtn: false,
-      bloc: block,
+      bloc: bloc,
       hasToolbar: true,
-      onFloatingActionButtonTapped: block.onFloatingActionButtonClicked,
+      onFloatingActionButtonTapped: bloc.onFloatingActionButtonClicked,
       content: buildBody,
       title: 'Notes');
 
@@ -33,7 +33,7 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   Widget get buildBody => Column(children: <Widget>[_buildNoteList()]);
 
   Widget _buildNoteList() => StreamBuilder<List<NoteModel>>(
-      stream: block.noteListStream,
+      stream: bloc.noteListStream,
       initialData: [],
       builder: (BuildContext context, AsyncSnapshot<List<NoteModel>> snapshot) {
         return ListView.separated(
@@ -41,7 +41,7 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
             itemCount: snapshot.data!.length,
             itemBuilder: (BuildContext context, int index) => NoteView(
                   model: snapshot.data![index],
-                  onClicked: () => block.onNoteTapped(snapshot.data![index]),
+                  onClicked: () => bloc.onNoteTapped(snapshot.data![index]),
                 ),
             separatorBuilder: (BuildContext context, int index) =>
                 Container(height: 24));
