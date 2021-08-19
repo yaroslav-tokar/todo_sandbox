@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/presentation/block/home_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/note_view.dart';
-import 'package:todo_sandbox/presentation/screens/base/base_screen.dart';
-import 'package:todo_sandbox/presentation/screens/base/base_state.dart';
+import 'package:todo_sandbox/presentation/screens/base/screen/base_screen.dart';
+import 'package:todo_sandbox/presentation/screens/base/state/base_state.dart';
 
 @immutable
 class HomeScreen extends StatefulWidget {
@@ -41,8 +41,7 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
             itemCount: snapshot.data!.length,
             itemBuilder: (BuildContext context, int index) => NoteView(
                   model: snapshot.data![index],
-                  onClicked: () =>
-                      block.onNoteTapped(snapshot.data![index]),
+                  onClicked: () => block.onNoteTapped(snapshot.data![index]),
                 ),
             separatorBuilder: (BuildContext context, int index) =>
                 Container(height: 24));

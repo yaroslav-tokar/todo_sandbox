@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:todo_sandbox/data/models/note_details_model.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
-import 'package:todo_sandbox/presentation/screens/base/base_screen.dart';
-import 'package:todo_sandbox/presentation/screens/base/base_state.dart';
+import 'package:todo_sandbox/presentation/screens/base/screen/base_screen.dart';
+import 'package:todo_sandbox/presentation/screens/base/state/base_state_with_arguments.dart';
 
 class NoteDetailsScreen extends StatefulWidget {
   const NoteDetailsScreen({Key? key}) : super(key: key);
@@ -25,10 +25,4 @@ class _NoteDetailsScreenState extends BaseStateWithArguments<NoteDetailsBloc,
   Widget get buildBody => Column(children: const <Widget>[
         Expanded(child: Center(child: Text('Note details')))
       ]);
-
-  @override
-  void dispose() {
-    block.dispose();
-    super.dispose();
-  }
 }

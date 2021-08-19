@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:todo_sandbox/data/enums.dart';
-import 'package:todo_sandbox/presentation/block/base_block.dart';
+import 'package:todo_sandbox/presentation/block/base/base_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/blocking_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/progress_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/reloadable_error_view.dart';
 
-class BaseScreenView<T extends BaseBlock> extends StatelessWidget {
+class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
   final bool hasToolbar;
   final String title;
   final bool hasBackBtn;

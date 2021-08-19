@@ -9,9 +9,9 @@ import 'package:todo_sandbox/data/models/note_open_mode.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/get_all_notes_use_case.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
 import 'package:todo_sandbox/presentation/arguments/screen_arguments.dart';
-import 'package:todo_sandbox/presentation/block/base_block.dart';
+import 'package:todo_sandbox/presentation/block/base/base_block.dart';
 
-class HomeBlock extends BaseBlock {
+class HomeBlock extends BaseBloc {
   final GetAllNotesUseCase getAllNotesUseCase;
 
   HomeBlock(this.getAllNotesUseCase);

@@ -1,21 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:todo_sandbox/core/util/logger.dart';
-import 'package:todo_sandbox/data/models/note_details_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:todo_sandbox/presentation/arguments/screen_arguments.dart';
-import 'package:todo_sandbox/presentation/block/base_block.dart';
-import 'package:todo_sandbox/presentation/di/di.dart';
-
-abstract class BaseState<B extends BaseBlock, W extends StatefulWidget>
-    extends State<W> {
-  B block = locator<B>();
-
-  @protected
-  Widget get buildBody;
-}
+import 'package:todo_sandbox/presentation/block/base/base_bloc_with_arguments.dart';
+import 'package:todo_sandbox/presentation/screens/base/state/base_state.dart';
 
 abstract class BaseStateWithArguments<
-    B extends BaseBlock,
+    B extends BaseBlocWithArguments<A>,
     W extends StatefulWidget,
     A extends ScreenArguments> extends BaseState<B, W> {
   @override
@@ -29,5 +18,11 @@ abstract class BaseStateWithArguments<
       final A? _arguments = ModalRoute.of(context)?.settings.arguments as A?;
       block.attachArguments(args: _arguments);
     });
+  }
+
+  @override
+  void dispose() {
+    block.dispose();
+    super.dispose();
   }
 }

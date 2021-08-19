@@ -13,17 +13,14 @@ typedef OnSuccess = Function<T>(T? data);
 typedef OnError = Function(ResponseError errorMessage);
 typedef OnDone = Function();
 
-abstract class BaseBlock<A extends ScreenArguments> {
+abstract class BaseBloc {
   Function? lastCallableFunction;
-  A? _attachedArguments;
 
   ScreenViewState _screenViewState = ScreenViewState.ready;
   ProgressViewState _progressViewState = ProgressViewState.idle;
 
   final _screenViewStateSc = StreamController<ScreenViewState>.broadcast();
   final _progressViewStateSc = StreamController<ProgressViewState>.broadcast();
-
-  void attachArguments({A? args});
 
   //Progress events
   @protected

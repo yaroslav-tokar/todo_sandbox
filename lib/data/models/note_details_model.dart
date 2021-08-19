@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/domain/provider/note_local_data_provider.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
-import 'package:todo_sandbox/presentation/block/base_block.dart';
+import 'package:todo_sandbox/presentation/block/base/base_bloc_with_arguments.dart';
 
-class NoteDetailsBloc extends BaseBlock<NoteDetailsArgument> {
+class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
   final TextEditingController _titleEtc = TextEditingController();
   final TextEditingController _contentEtc = TextEditingController();
 
@@ -24,6 +24,7 @@ class NoteDetailsBloc extends BaseBlock<NoteDetailsArgument> {
 
   @override
   void attachArguments({NoteDetailsArgument? args}) {
-    logInfo('NoteDetails args\t$args');
+    arguments = args;
+    logInfo('NoteDetails args\t$arguments');
   }
 }
