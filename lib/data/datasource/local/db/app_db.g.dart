@@ -81,7 +81,7 @@ class _$AppDatabase extends AppDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `notes` (`category` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL)');
+            'CREATE TABLE IF NOT EXISTS `notes` (`category` TEXT NOT NULL, `id` INTEGER PRIMARY KEY AUTOINCREMENT, `title` TEXT NOT NULL, `content` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `updated_at` INTEGER NOT NULL)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -151,7 +151,7 @@ class _$NoteDao extends NoteDao {
     return _queryAdapter.queryList('SELECT * FROM notes',
         mapper: (Map<String, Object?> row) => NoteDbo(
             category: row['category'] as String,
-            id: row['id'] as int,
+            id: row['id'] as int?,
             title: row['title'] as String,
             content: row['content'] as String,
             createAt: row['created_at'] as int,
@@ -163,7 +163,7 @@ class _$NoteDao extends NoteDao {
     return _queryAdapter.query('SELECT * FROM notes WHERE id = ?1',
         mapper: (Map<String, Object?> row) => NoteDbo(
             category: row['category'] as String,
-            id: row['id'] as int,
+            id: row['id'] as int?,
             title: row['title'] as String,
             content: row['content'] as String,
             createAt: row['created_at'] as int,

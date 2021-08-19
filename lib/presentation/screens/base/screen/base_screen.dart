@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:todo_sandbox/config/theme/styles.dart';
 import 'package:todo_sandbox/core/constants/colors.dart';
 import 'package:todo_sandbox/core/util/hex_color.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/enums.dart';
 import 'package:todo_sandbox/presentation/block/base/base_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/blocking_view.dart';
@@ -11,17 +12,16 @@ import 'package:todo_sandbox/presentation/custom_view/reloadable_error_view.dart
 class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
   final bool hasToolbar;
   final String? title;
-  final bool hasBackBtn;
   final Widget content;
   final ScreenViewState screenViewState;
   final bool canPop;
   final VoidCallback? onFloatingActionButtonTapped;
+  final VoidCallback? onBackBtnPressed;
 
   final T bloc;
 
   const BaseScreenView({
     Key? key,
-    required this.hasBackBtn,
     required this.bloc,
     required this.hasToolbar,
     this.title = '',
@@ -29,6 +29,7 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
     this.screenViewState = ScreenViewState.ready,
     this.canPop = true,
     this.onFloatingActionButtonTapped,
+    this.onBackBtnPressed,
   }) : super(key: key);
 
   @override
@@ -44,15 +45,18 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
         floatingActionButton: _buildFloatingActionButton(),
         appBar: toolBar,
         body: Column(
+          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
-
-            Expanded(
-              child: screenContent,
-            )
+            screenContent,
           ],
         ));
 
-    return WillPopScope(onWillPop: () async => canPop, child: scaffold);
+    return WillPopScope(
+        onWillPop: () async {
+          bloc.onBackButtonPressed.call();
+          return canPop;
+        },
+        child: scaffold);
   }
 
   Widget _buildFloatingActionButton() => onFloatingActionButtonTapped != null
@@ -70,7 +74,7 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
 
         switch (snapshot.data) {
           case ScreenViewState.ready:
-            bodyContent = Stack(children: [content, _buildProgressView()]);
+            bodyContent = Expanded(child: Stack(children: [content, _buildProgressView()]));
             break;
           case ScreenViewState.notReady:
             bodyContent = const BlockingView();
@@ -95,10 +99,11 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
                   : const SizedBox.shrink());
 
   AppBar _buildToolbar() => AppBar(
-          title: StreamBuilder<String>(
-        initialData: title,
-        stream: bloc.toolbarTitleStream,
-        builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
-            Text(snapshot.data ?? ''),
-      ));
+        title: StreamBuilder<String>(
+          initialData: title,
+          stream: bloc.toolbarTitleStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
+              Text(snapshot.data ?? ''),
+        ),
+      );
 }

@@ -8,6 +8,7 @@ import 'package:todo_sandbox/domain/repositories/note_repository.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/create_note_use_case.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/delete_note_use_case.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/get_all_notes_use_case.dart';
+import 'package:todo_sandbox/domain/use_case/note_use_case/get_note_use_case.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/update_note_use_case.dart';
 import 'package:todo_sandbox/presentation/block/home_block.dart';
 import 'package:todo_sandbox/presentation/screens/note/note_details_screen.dart';
@@ -37,8 +38,9 @@ Future<void> setupDi() async {
   locator.registerSingleton<UpdateNoteUseCase>(UpdateNoteUseCase(locator()));
   locator.registerSingleton<DeleteNoteUseCase>(DeleteNoteUseCase(locator()));
   locator.registerSingleton<CreateNoteUseCase>(CreateNoteUseCase(locator()));
+  locator.registerSingleton<GetNoteByIdUseCase>(GetNoteByIdUseCase(locator()));
 
   //Register BloCs
   locator.registerFactory<HomeBlock>(() => HomeBlock(locator()));
-  locator.registerFactory<NoteDetailsBloc>(()=>NoteDetailsBloc(locator()));
+  locator.registerFactory<NoteDetailsBloc>(() => NoteDetailsBloc(locator(), locator(), locator()));
 }

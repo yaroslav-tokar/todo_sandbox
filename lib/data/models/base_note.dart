@@ -3,8 +3,7 @@ import 'package:floor/floor.dart';
 
 class BaseNote extends Equatable {
   @PrimaryKey(autoGenerate: true)
-  final int id;
-
+  final int? id;
   @ColumnInfo(name: 'title')
   final String title;
   @ColumnInfo(name: 'content')
@@ -15,7 +14,7 @@ class BaseNote extends Equatable {
   final int updateAt;
 
   const BaseNote({
-    required this.id,
+    this.id,
     required this.title,
     required this.content,
     required this.createAt,
@@ -23,7 +22,7 @@ class BaseNote extends Equatable {
   });
 
   @override
-  List<Object?> get props => <Object>[id, title];
+  List<Object?> get props => <Object>[id!, createAt];
 
   @override
   bool get stringify => true;

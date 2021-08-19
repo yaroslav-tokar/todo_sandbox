@@ -7,7 +7,7 @@ class NoteModel extends BaseNote {
   const NoteModel({
     required this.category,
     required String title,
-    required int id,
+    int? id,
     required String content,
     required int createdAt,
     required int updatedAt,

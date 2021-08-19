@@ -9,7 +9,7 @@ class NoteDbo extends BaseNote {
 
   const NoteDbo({
     required this.category,
-    required int id,
+    int? id,
     required String title,
     required String content,
     required int createAt,

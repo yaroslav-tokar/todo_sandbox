@@ -83,6 +83,7 @@ abstract class BaseBloc with ToolbarConfigMixin {
     lastCallableFunction?.call();
   }
 
+  Future<void> onBackButtonPressed() async {}
 
   void dispose() {
     disposeToolbar();

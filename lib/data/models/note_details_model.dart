@@ -1,6 +1,12 @@
 import 'package:flutter/cupertino.dart';
+import 'package:todo_sandbox/core/resourses/data_state.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
+import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/data/models/note_open_mode.dart';
-import 'package:todo_sandbox/domain/provider/note_local_data_provider.dart';
+import 'package:todo_sandbox/domain/entities/note_request_params.dart';
+import 'package:todo_sandbox/domain/use_case/note_use_case/create_note_use_case.dart';
+import 'package:todo_sandbox/domain/use_case/note_use_case/get_note_use_case.dart';
+import 'package:todo_sandbox/domain/use_case/note_use_case/update_note_use_case.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
 import 'package:todo_sandbox/presentation/block/base/base_bloc_with_arguments.dart';
 
@@ -8,18 +14,77 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
   final TextEditingController titleEtc = TextEditingController();
   final TextEditingController contentEtc = TextEditingController();
 
-  final NoteLocalDataProvider _localDataProvider;
+  final CreateNoteUseCase _createNoteUseCase;
+  final UpdateNoteUseCase _updateNoteUseCase;
+  final GetNoteByIdUseCase _getNoteByIdUseCase;
 
-  NoteDetailsBloc(this._localDataProvider);
+  NoteDetailsBloc(
+    this._createNoteUseCase,
+    this._updateNoteUseCase,
+    this._getNoteByIdUseCase,
+  );
 
   Future<void> initTextFields() async {
     titleEtc.text = 'title';
     contentEtc.text = 'Content';
   }
 
-  Future<void> onSubmitButtonTapped() async {
-    final String title = titleEtc.text;
-    final String content = contentEtc.text;
+  @override
+  Future<void> onBackButtonPressed() async {
+    final NoteOpenMode noteOpenMode = arguments!.mode;
+
+    final String noteTitle = titleEtc.text;
+    final String noteContent = contentEtc.text;
+
+    if (noteTitle.isEmpty && noteContent.isEmpty) return;
+
+    switch (noteOpenMode) {
+      case NoteOpenMode.create:
+        handleCrateNoteCase(noteTitle, noteContent);
+        break;
+      case NoteOpenMode.update:
+        handleUpdateNoteCase(noteTitle, noteContent);
+        break;
+    }
+  }
+
+  Future<void> handleCrateNoteCase(String noteTitle, String noteContent) async {
+    final NoteModel noteModel = NoteModel(
+      category: 'common',
+      title: noteTitle,
+      content: noteContent,
+      createdAt: DateTime.now().millisecondsSinceEpoch,
+      updatedAt: DateTime.now().millisecondsSinceEpoch,
+    );
+
+    await _createNoteUseCase(params: noteModel);
+  }
+
+  Future<void> handleUpdateNoteCase(
+      String noteTitle, String noteContent) async {
+    final DataState<NoteModel> searchedNote = await _getNoteByIdUseCase.call(
+      params: NoteRequestParams(id: currentNoteIdOrNull),
+    );
+
+    if (currentNoteIdOrNull != null) {
+      if (searchedNote is DataStateSuccess) {
+        final NoteModel noteModel = NoteModel(
+            id: currentNoteIdOrNull,
+            category: 'common',
+            title: noteTitle,
+            content: noteContent,
+            createdAt: DateTime.now().millisecondsSinceEpoch,
+            updatedAt: DateTime.now().millisecondsSinceEpoch);
+
+        _updateNoteUseCase(params: noteModel);
+      }
+
+      if (searchedNote is DataStateFailed) {
+        logInfo('Error, can find note with id\t$currentNoteIdOrNull');
+      }
+    } else {
+      handleCrateNoteCase(noteTitle, noteContent);
+    }
   }
 
   @override
@@ -34,6 +99,19 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
     if (arguments != null) {
       updateToolbarTitle(
           arguments!.mode.isCrateMode ? 'Create new note' : 'Note details');
+      checkModeAndReact(arguments?.noteModel);
     }
   }
+
+  Future<void> checkModeAndReact(NoteModel? noteModel) async {
+    if (isUpdateMode) {
+      titleEtc.text = noteModel!.title;
+      contentEtc.text = noteModel.content;
+    }
+  }
+
+  bool get isUpdateMode =>
+      arguments?.noteModel != null && currentNoteIdOrNull != null;
+
+  int? get currentNoteIdOrNull => arguments?.noteModel?.id;
 }

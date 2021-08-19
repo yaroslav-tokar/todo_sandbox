@@ -34,4 +34,13 @@ class NoteRepositoryImpl extends NoteRepository {
     final updatedNoteId = await _localDataProvider.updateNote(noteModel);
     return updatedNoteId;
   }
+
+  @override
+  Future<NoteModel?> getNoteById(NoteRequestParams? noteRequestParams) async {
+    final NoteModel? searchedNote = await _localDataProvider.getNoteById(
+      noteRequestParams!.id!,
+    );
+
+    return searchedNote;
+  }
 }

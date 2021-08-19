@@ -5,7 +5,7 @@ class NoteRequestParams extends Equatable {
   final int? id;
   final String? title;
 
-  const NoteRequestParams(this.name, this.id, this.title);
+  const NoteRequestParams({this.name, this.id, this.title});
 
   @override
   List<Object?> get props => [id, name];

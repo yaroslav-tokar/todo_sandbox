@@ -35,8 +35,7 @@ class NoteLocalDataProvider extends DataProvider {
   }
 
   Future<int> updateNote(NoteModel noteModel) async {
-    final int updatedNoteId =
-        await _noteDao.updateItem(noteModel.toNoteDbo());
+    final int updatedNoteId = await _noteDao.updateItem(noteModel.toNoteDbo());
     return updatedNoteId;
   }
 }
