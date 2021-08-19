@@ -1,1 +1,3 @@
-class AppBloc
+class AppBloc{
+
+}
