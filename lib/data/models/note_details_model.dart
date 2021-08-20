@@ -87,10 +87,6 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   void attachArguments({NoteDetailsArgument? args}) {
@@ -105,8 +101,11 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
 
   Future<void> checkModeAndReact(NoteModel? noteModel) async {
     if (isUpdateMode) {
+
       titleEtc.text = noteModel!.title;
       contentEtc.text = noteModel.content;
+
+      if(noteModel.hasFilledTitle) updateToolbarTitle(noteModel.title);
     }
   }
 
@@ -114,4 +113,10 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
       arguments?.noteModel != null && currentNoteIdOrNull != null;
 
   int? get currentNoteIdOrNull => arguments?.noteModel?.id;
+
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 }

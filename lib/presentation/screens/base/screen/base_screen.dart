@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:todo_sandbox/config/theme/styles.dart';
-import 'package:todo_sandbox/core/constants/colors.dart';
-import 'package:todo_sandbox/core/util/hex_color.dart';
-import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/enums.dart';
 import 'package:todo_sandbox/presentation/block/base/base_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/blocking_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/progress_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/reloadable_error_view.dart';
+
+const TextStyle toolbarFontStyle =
+    TextStyle(fontWeight: FontWeight.w800, fontSize: 20);
 
 class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
   final bool hasToolbar;
@@ -45,7 +44,6 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
         floatingActionButton: _buildFloatingActionButton(),
         appBar: toolBar,
         body: Column(
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             screenContent,
           ],
@@ -74,7 +72,8 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
 
         switch (snapshot.data) {
           case ScreenViewState.ready:
-            bodyContent = Expanded(child: Stack(children: [content, _buildProgressView()]));
+            bodyContent = Expanded(
+                child: Stack(children: [content, _buildProgressView()]));
             break;
           case ScreenViewState.notReady:
             bodyContent = const BlockingView();
@@ -83,6 +82,9 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
             bodyContent = RetryView(
               onReloadBtnClicked: () => bloc.lastCallableFunction?.call(),
             );
+            break;
+          default:
+            //stub
             break;
         }
 
@@ -102,8 +104,12 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
         title: StreamBuilder<String>(
           initialData: title,
           stream: bloc.toolbarTitleStream,
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) =>
-              Text(snapshot.data ?? ''),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            return Text(
+              snapshot.data ?? '',
+              style: toolbarFontStyle,
+            );
+          },
         ),
       );
 }

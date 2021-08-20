@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:todo_sandbox/core/resourses/data_state.dart';
+import 'package:todo_sandbox/data/datasource/local/dbo/note_dbo.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/domain/entities/note_request_params.dart';
 import 'package:todo_sandbox/domain/provider/note_local_data_provider.dart';
@@ -42,5 +44,11 @@ class NoteRepositoryImpl extends NoteRepository {
     );
 
     return searchedNote;
+  }
+
+  @override
+  Stream<List<NoteModel>> getAllNotesAsStream(
+      NoteRequestParams? noteRequestParams) {
+    return _localDataProvider.getAllNotesAsStream(noteRequestParams);
   }
 }

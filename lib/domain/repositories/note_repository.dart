@@ -6,6 +6,8 @@ import 'package:todo_sandbox/domain/entities/note_request_params.dart';
 abstract class NoteRepository {
   Future<DataState<List<NoteModel>>> getAllNotes(NoteRequestParams? noteRequestParams);
 
+  Stream<List<NoteModel>> getAllNotesAsStream(NoteRequestParams? noteRequestParams);
+
   Future<NoteModel?> getNoteById(NoteRequestParams? noteRequestParams);
 
   Future<int> createNote(NoteModel noteModel);

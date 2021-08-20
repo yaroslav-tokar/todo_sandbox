@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todo_sandbox/core/constants/colors.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/presentation/block/home_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/material_note_card_view.dart';
@@ -17,12 +18,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
-  void initState() {
-    super.initState();
-    bloc.fetchNotes();
-  }
-
-  @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       bloc: bloc,
       hasToolbar: true,
@@ -31,28 +26,23 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
       title: 'Notes');
 
   @override
-  Widget get buildBody => SingleChildScrollView(
-          child: Column(
-        children: <Widget>[_buildNoteList()],
-      ));
+  Widget get buildBody => Column(
+        children: <Widget>[Expanded(child: _buildNoteList())],
+      );
 
-  //TODO: fix scroll view
   Widget _buildNoteList() => StreamBuilder<List<NoteModel>>(
-      stream: bloc.noteListStream,
+      stream: bloc.notesStream,
       initialData: [],
-      builder: (BuildContext context, AsyncSnapshot<List<NoteModel>> snapshot) {
-        return ListView.separated(
-            shrinkWrap: true,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (BuildContext context, int index) {
-              final NoteModel note = snapshot.data![index];
-
-              return MaterialCardNoteView(
-                noteModel: note,
-                onClicked: () => bloc.onNoteTapped(note),
-              );
-            },
-            separatorBuilder: (BuildContext context, int index) =>
-                Container(height: 2));
-      });
+      builder: (BuildContext context,
+              AsyncSnapshot<List<NoteModel>> snapshot) =>
+          StaggeredGridView.countBuilder(
+              staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
+              itemBuilder: (BuildContext context, int index) =>
+                  NoteView(
+                      model: snapshot.data![index],
+                      onClicked: () => bloc.onNoteTapped(
+                            snapshot.data![index],
+                          )),
+              itemCount: snapshot.data!.length,
+              crossAxisCount: 2));
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:todo_sandbox/data/datasource/local/dao/note_dao.dart';
 import 'package:todo_sandbox/data/datasource/local/dbo/note_dbo.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
@@ -27,6 +29,14 @@ class NoteLocalDataProvider extends DataProvider {
   ) async {
     final notesList = await _noteDao.findAllNotes();
     return notesList.map((NoteDbo noteDbo) => noteDbo.toNoteModel()).toList();
+  }
+
+  Stream<List<NoteModel>> getAllNotesAsStream(
+    NoteRequestParams? noteRequestParams,
+  ) {
+    return _noteDao.findAllAllNotesAsStream().map(
+          (List<NoteDbo> noteDboList) => NoteModel.fromList(noteDboList),
+        );
   }
 
   Future<NoteModel?> getNoteById(int noteId) async {

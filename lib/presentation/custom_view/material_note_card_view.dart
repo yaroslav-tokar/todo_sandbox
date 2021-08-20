@@ -14,18 +14,29 @@ class MaterialCardNoteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GestureDetector(
         onTap: () => onClicked.call(),
-        child: SizedBox(
-          child: Card(
-            margin: const EdgeInsets.all(10),
-            color: Colors.green[100],
-            shadowColor: Colors.blueGrey,
-            elevation: 3,
-            child: Column(
-              children: <Widget>[
-                ListTile(title: Text(noteModel.title)),
-                ListTile(title: Text(noteModel.content))
-              ],
-            ),
+        child: Card(
+          margin: const EdgeInsets.all(10),
+          color: Colors.white,
+          shadowColor: Colors.blueGrey,
+          elevation: 3,
+          child: Column(
+            children: <Widget>[
+              if (noteModel.hasFilledTitle)
+                ListTile(
+                    title: Text(noteModel.title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        ))),
+              if (noteModel.hasFilledContent)
+                ListTile(
+                  title: Text(noteModel.content,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      )),
+                )
+            ],
           ),
         ),
       );

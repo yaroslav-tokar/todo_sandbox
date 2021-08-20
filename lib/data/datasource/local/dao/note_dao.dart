@@ -13,4 +13,7 @@ abstract class NoteDao extends BaseDao<NoteDbo> {
 
   @Query('DELETE FROM notes WHERE id = :noteId')
   Future<int?> deleteNoteById(int noteId);
+
+  @Query('SELECT * FROM notes')
+  Stream<List<NoteDbo>> findAllAllNotesAsStream();
 }

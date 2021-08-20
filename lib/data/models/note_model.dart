@@ -19,6 +19,13 @@ class NoteModel extends BaseNote {
           updateAt: updatedAt,
         );
 
+  bool get hasFilledTitle => title.isNotEmpty;
+
+  bool get hasFilledContent => content.isNotEmpty;
+
+  static List<NoteModel> fromList(List<NoteDbo> noteDboList) =>
+      noteDboList.map((NoteDbo noteDbo) => noteDbo.toNoteModel()).toList();
+
   NoteDbo toNoteDbo() => NoteDbo(
       id: id,
       category: category,

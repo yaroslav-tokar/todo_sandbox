@@ -97,7 +97,7 @@ class _$AppDatabase extends AppDatabase {
 
 class _$NoteDao extends NoteDao {
   _$NoteDao(this.database, this.changeListener)
-      : _queryAdapter = QueryAdapter(database),
+      : _queryAdapter = QueryAdapter(database, changeListener),
         _noteDboInsertionAdapter = InsertionAdapter(
             database,
             'notes',
@@ -108,7 +108,8 @@ class _$NoteDao extends NoteDao {
                   'content': item.content,
                   'created_at': item.createAt,
                   'updated_at': item.updateAt
-                }),
+                },
+            changeListener),
         _noteDboUpdateAdapter = UpdateAdapter(
             database,
             'notes',
@@ -120,7 +121,8 @@ class _$NoteDao extends NoteDao {
                   'content': item.content,
                   'created_at': item.createAt,
                   'updated_at': item.updateAt
-                }),
+                },
+            changeListener),
         _noteDboDeletionAdapter = DeletionAdapter(
             database,
             'notes',
@@ -132,7 +134,8 @@ class _$NoteDao extends NoteDao {
                   'content': item.content,
                   'created_at': item.createAt,
                   'updated_at': item.updateAt
-                });
+                },
+            changeListener);
 
   final sqflite.DatabaseExecutor database;
 
@@ -175,6 +178,20 @@ class _$NoteDao extends NoteDao {
   Future<int?> deleteNoteById(int noteId) async {
     await _queryAdapter
         .queryNoReturn('DELETE FROM notes WHERE id = ?1', arguments: [noteId]);
+  }
+
+  @override
+  Stream<List<NoteDbo>> findAllAllNotesAsStream() {
+    return _queryAdapter.queryListStream('SELECT * FROM notes',
+        mapper: (Map<String, Object?> row) => NoteDbo(
+            category: row['category'] as String,
+            id: row['id'] as int?,
+            title: row['title'] as String,
+            content: row['content'] as String,
+            createAt: row['created_at'] as int,
+            updateAt: row['updated_at'] as int),
+        queryableName: 'notes',
+        isView: false);
   }
 
   @override

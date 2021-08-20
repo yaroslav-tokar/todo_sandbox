@@ -14,19 +14,33 @@ class NoteView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.symmetric(horizontal: 3, vertical: 4),
         decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
-            border: Border.all(width: 2)),
+            borderRadius: const BorderRadius.all(Radius.circular(3)),
+            border: Border.all(color: Colors.grey.withOpacity(0.5)),
+            ),
         child: Material(
-            clipBehavior: Clip.antiAlias,
-            borderRadius: const BorderRadius.all(Radius.circular(8)),
+            borderRadius: const BorderRadius.all(Radius.circular(2)),
             child: InkWell(
               splashColor: primaryColor,
               onTap: () => onClicked.call(),
               child: Column(
-                children: [
-                  Text(model.title),
-                  Text(model.content),
+                children: <Widget>[
+                  if (model.hasFilledTitle)
+                    ListTile(
+                        title: Text(model.title,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w800,
+                            ))),
+                  if (model.hasFilledContent)
+                    ListTile(
+                      title: Text(model.content,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w400,
+                          )),
+                    )
                 ],
               ),
             )),
