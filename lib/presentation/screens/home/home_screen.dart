@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/presentation/block/home_block.dart';
-import 'package:todo_sandbox/presentation/custom_view/material_note_card_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/note_view.dart';
 import 'package:todo_sandbox/presentation/screens/base/screen/base_screen.dart';
 import 'package:todo_sandbox/presentation/screens/base/state/base_state.dart';
@@ -37,12 +35,14 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
               AsyncSnapshot<List<NoteModel>> snapshot) =>
           StaggeredGridView.countBuilder(
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
-              itemBuilder: (BuildContext context, int index) =>
-                  NoteView(
-                      model: snapshot.data![index],
-                      onClicked: () => bloc.onNoteTapped(
-                            snapshot.data![index],
-                          )),
+              itemBuilder: (BuildContext context, int index) => NoteView(
+                  model: snapshot.data![index],
+                  onLongPressed: () => bloc.onNoteLongPressed(
+                        snapshot.data![index],
+                      ),
+                  onClicked: () => bloc.onNoteTapped(
+                        snapshot.data![index],
+                      )),
               itemCount: snapshot.data!.length,
               crossAxisCount: 2));
 }

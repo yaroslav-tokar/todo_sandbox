@@ -22,7 +22,7 @@ class BaseNote extends Equatable {
   });
 
   @override
-  List<Object?> get props => <Object>[id!, createAt];
+  List<Object?> get props => <Object>[id!];
 
   @override
   bool get stringify => true;

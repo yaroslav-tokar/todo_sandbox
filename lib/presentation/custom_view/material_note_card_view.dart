@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 
 class MaterialCardNoteView extends StatelessWidget {
@@ -14,6 +15,7 @@ class MaterialCardNoteView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => GestureDetector(
         onTap: () => onClicked.call(),
+
         child: Card(
           margin: const EdgeInsets.all(10),
           color: Colors.white,

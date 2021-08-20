@@ -43,6 +43,6 @@ Future<void> setupDi() async {
   locator.registerSingleton<GetAllNotesStreamUseCase>(GetAllNotesStreamUseCase(locator()));
 
   //Register BloCs
-  locator.registerFactory<HomeBlock>(() => HomeBlock(locator(), locator()));
+  locator.registerFactory<HomeBlock>(() => HomeBlock(locator()));
   locator.registerFactory<NoteDetailsBloc>(() => NoteDetailsBloc(locator(), locator(), locator()));
 }
