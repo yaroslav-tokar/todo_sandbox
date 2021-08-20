@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:todo_sandbox/config/mixin/toolbar_config_mixin.dart';
 import 'package:todo_sandbox/data/enums.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/presentation/block/base/base_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/blocking_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/progress_view.dart';
 import 'package:todo_sandbox/presentation/custom_view/reloadable_error_view.dart';
+import 'package:todo_sandbox/presentation/custom_view/toolbar_view.dart';
 
 const TextStyle toolbarFontStyle =
     TextStyle(fontWeight: FontWeight.w800, fontSize: 20);
 
 class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
-  final bool hasToolbar;
-  final String? title;
+  final ToolbarSettings? toolbarSettings;
   final Widget content;
   final ScreenViewState screenViewState;
   final bool canPop;
@@ -22,13 +24,12 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
   const BaseScreenView({
     Key? key,
     required this.bloc,
-    required this.hasToolbar,
-    this.title = '',
     required this.content,
     this.screenViewState = ScreenViewState.ready,
     this.canPop = true,
     this.onFloatingActionButtonTapped,
     this.onBackBtnPressed,
+    this.toolbarSettings,
   }) : super(key: key);
 
   @override
@@ -36,15 +37,17 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
 
   Widget _buildScreen(BuildContext context) {
     // final double paddingTop = MediaQuery.of(context).padding.top;
-    final AppBar? toolBar = hasToolbar ? _buildToolbar() : null;
+    final Widget toolBar =
+        toolbarSettings != null ? _buildToolbar() : const SizedBox.shrink();
+    bloc.updateToolbarSettings(toolbarSettings);
 
     final Widget screenContent = _buildScreenContent();
 
     final Widget scaffold = Scaffold(
         floatingActionButton: _buildFloatingActionButton(),
-        appBar: toolBar,
         body: Column(
           children: <Widget>[
+            toolBar,
             screenContent,
           ],
         ));
@@ -100,16 +103,10 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
                   ? const ProgressView()
                   : const SizedBox.shrink());
 
-  AppBar _buildToolbar() => AppBar(
-        title: StreamBuilder<String>(
-          initialData: title,
-          stream: bloc.toolbarTitleStream,
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            return Text(
-              snapshot.data ?? '',
-              style: toolbarFontStyle,
-            );
-          },
-        ),
-      );
+  Widget _buildToolbar() => StreamBuilder<ToolbarSettings>(
+      initialData: defaultToolbarSettings,
+      stream: bloc.toolbarSettingsStream,
+      builder:
+          (BuildContext context, AsyncSnapshot<ToolbarSettings> snapshot) =>
+              ToolbarView(toolbarSettings: snapshot.data));
 }

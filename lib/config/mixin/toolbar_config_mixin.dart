@@ -1,19 +1,29 @@
 import 'dart:async';
 
 import 'package:rxdart/rxdart.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
+
+ToolbarSettings defaultToolbarSettings = ToolbarSettings(
+  title: '',
+  onLeftCloseButtonTapped: () => null,
+);
 
 class ToolbarConfigMixin {
-  final _toolbarTitleSc = BehaviorSubject<String>();
+  final _toolbarSettingsSc = BehaviorSubject<ToolbarSettings>();
 
-  void updateToolbarTitle(String newTitle) {
-    _toolbarTitleSc.add(newTitle);
+  Future<void> updateToolbarSettings(ToolbarSettings? toolbarSettings) async {
+    _toolbarSettingsSc.add(toolbarSettings ?? defaultToolbarSettings);
   }
 
-  Stream<String> get toolbarTitleStream => _toolbarTitleSc.stream;
+  Future<void> updateToolbarTitle(String toolbarTitle) async {
+    _toolbarSettingsSc.add(defaultToolbarSettings..title = toolbarTitle);
+  }
 
-  String get toolbarTitle => _toolbarTitleSc.value;
+  Stream<ToolbarSettings> get toolbarSettingsStream =>
+      _toolbarSettingsSc.stream;
+
 
   void disposeToolbar() {
-    _toolbarTitleSc.close();
+    _toolbarSettingsSc.close();
   }
 }

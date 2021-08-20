@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/presentation/block/home_block.dart';
 import 'package:todo_sandbox/presentation/custom_view/note_view.dart';
 import 'package:todo_sandbox/presentation/screens/base/screen/base_screen.dart';
@@ -18,10 +19,9 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       bloc: bloc,
-      hasToolbar: true,
+      toolbarSettings: ToolbarSettings(title: 'Notes'),
       onFloatingActionButtonTapped: bloc.onFloatingActionButtonClicked,
-      content: buildBody,
-      title: 'Notes');
+      content: buildBody);
 
   @override
   Widget get buildBody => Column(

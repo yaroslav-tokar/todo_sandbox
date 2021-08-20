@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo_sandbox/data/models/note_details_model.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
 import 'package:todo_sandbox/presentation/screens/base/screen/base_screen.dart';
 import 'package:todo_sandbox/presentation/screens/base/state/base_state_with_arguments.dart';
@@ -18,7 +19,7 @@ class _NoteDetailsScreenState extends BaseStateWithArguments<NoteDetailsBloc,
   Widget build(BuildContext context) => BaseScreenView<NoteDetailsBloc>(
         bloc: bloc,
         onBackBtnPressed: bloc.onBackButtonPressed,
-        hasToolbar: true,
+        toolbarSettings: ToolbarSettings(title: ''),
         content: buildBody,
       );
 
