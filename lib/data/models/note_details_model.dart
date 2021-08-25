@@ -3,6 +3,7 @@ import 'package:todo_sandbox/core/resourses/data_state.dart';
 import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
 import 'package:todo_sandbox/data/models/note_open_mode.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/domain/entities/note_request_params.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/create_note_use_case.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/get_note_use_case.dart';
@@ -87,25 +88,26 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
     }
   }
 
-
   @override
   void attachArguments({NoteDetailsArgument? args}) {
     arguments = args;
 
-    if (arguments != null) {
-      updateToolbarTitle(
-          arguments!.mode.isCrateMode ? 'Create new note' : 'Note details');
-      checkModeAndReact(arguments?.noteModel);
-    }
+    if (arguments != null) checkModeAndReact(arguments?.noteModel);
   }
 
   Future<void> checkModeAndReact(NoteModel? noteModel) async {
     if (isUpdateMode) {
-
       titleEtc.text = noteModel!.title;
       contentEtc.text = noteModel.content;
 
-      if(noteModel.hasFilledTitle) updateToolbarTitle(noteModel.title);
+      if (noteModel.hasFilledTitle) {
+        final String title = arguments!.mode.isCrateMode
+            ? 'Create new note'
+            : arguments?.noteModel?.title ?? '';
+
+        saveToolbarStateAndUpdate(
+            ToolbarSettings(title: title, hasBackButton: true));
+      }
     }
   }
 
@@ -113,7 +115,6 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
       arguments?.noteModel != null && currentNoteIdOrNull != null;
 
   int? get currentNoteIdOrNull => arguments?.noteModel?.id;
-
 
   @override
   void dispose() {

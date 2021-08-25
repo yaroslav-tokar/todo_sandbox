@@ -1,5 +1,5 @@
 class ToolbarSettings {
-  String title;
+  String? title;
   final bool hasBackButton;
   final bool? hasLeftCloseButton;
   final Function? onLeftCloseButtonTapped;
@@ -8,6 +8,6 @@ class ToolbarSettings {
     this.hasLeftCloseButton = false,
     this.onLeftCloseButtonTapped,
     this.hasBackButton = false,
-    required this.title,
+    this.title,
   });
 }

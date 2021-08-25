@@ -16,4 +16,6 @@ class Navigation {
 
   Future<void> pushNamed(AppRoute appRoute, {Object? args}) async =>
       navigatorKey.currentState!.pushNamed(appRoute.value, arguments: args);
+
+  Future<void> pop() async => navigatorKey.currentState?.pop();
 }

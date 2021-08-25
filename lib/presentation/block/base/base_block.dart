@@ -4,11 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:todo_sandbox/config/mixin/toolbar_config_mixin.dart';
 import 'package:todo_sandbox/core/resourses/data_state.dart';
 import 'package:todo_sandbox/core/usecase/use_case.dart';
-import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/enums.dart';
-import 'package:todo_sandbox/data/models/note_details_model.dart';
+import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/data/network/api_components.dart';
-import 'package:todo_sandbox/presentation/arguments/screen_arguments.dart';
 
 typedef OnSuccess = Function<T>(T? data);
 typedef OnError = Function(ResponseError errorMessage);
@@ -16,6 +14,7 @@ typedef OnDone = Function();
 
 abstract class BaseBloc with ToolbarConfigMixin {
   Function? lastCallableFunction;
+  ToolbarSettings? _currentToolbarSettings;
 
   ScreenViewState _screenViewState = ScreenViewState.ready;
   ProgressViewState _progressViewState = ProgressViewState.idle;
@@ -90,5 +89,12 @@ abstract class BaseBloc with ToolbarConfigMixin {
     _screenViewStateSc.close();
     _progressViewStateSc.close();
     lastCallableFunction = null;
+  }
+
+  Future<void> saveToolbarStateAndUpdate(
+    ToolbarSettings? toolbarSettings,
+  ) async {
+    _currentToolbarSettings = toolbarSettings;
+    updateToolbarSettings(_currentToolbarSettings);
   }
 }

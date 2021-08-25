@@ -19,7 +19,7 @@ class _NoteDetailsScreenState extends BaseStateWithArguments<NoteDetailsBloc,
   Widget build(BuildContext context) => BaseScreenView<NoteDetailsBloc>(
         bloc: bloc,
         onBackBtnPressed: bloc.onBackButtonPressed,
-        toolbarSettings: ToolbarSettings(title: ''),
+        toolbarSettings: ToolbarSettings(),
         content: buildBody,
       );
 

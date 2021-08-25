@@ -39,7 +39,6 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
     // final double paddingTop = MediaQuery.of(context).padding.top;
     final Widget toolBar =
         toolbarSettings != null ? _buildToolbar() : const SizedBox.shrink();
-    bloc.updateToolbarSettings(toolbarSettings);
 
     final Widget screenContent = _buildScreenContent();
 
@@ -104,7 +103,7 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
                   : const SizedBox.shrink());
 
   Widget _buildToolbar() => StreamBuilder<ToolbarSettings>(
-      initialData: defaultToolbarSettings,
+      initialData: toolbarSettings ?? defaultToolbarSettings,
       stream: bloc.toolbarSettingsStream,
       builder:
           (BuildContext context, AsyncSnapshot<ToolbarSettings> snapshot) =>
