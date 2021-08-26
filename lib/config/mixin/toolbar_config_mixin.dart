@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 
@@ -22,6 +23,8 @@ class ToolbarConfigMixin {
   Stream<ToolbarSettings> get toolbarSettingsStream =>
       _toolbarSettingsSc.stream;
 
+  @protected
+  ToolbarSettings get toolbarCurrentSettings => _toolbarSettingsSc.value;
 
   void disposeToolbar() {
     _toolbarSettingsSc.close();

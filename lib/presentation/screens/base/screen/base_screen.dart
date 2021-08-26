@@ -44,11 +44,14 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
 
     final Widget scaffold = Scaffold(
         floatingActionButton: _buildFloatingActionButton(),
-        body: Column(
-          children: <Widget>[
-            toolBar,
-            screenContent,
-          ],
+        body: SafeArea(
+          child: Column(
+            children: <Widget>[
+              toolBar,
+              const SizedBox(height: 8),
+              screenContent,
+            ],
+          ),
         ));
 
     return WillPopScope(
@@ -107,5 +110,8 @@ class BaseScreenView<T extends BaseBloc> extends StatelessWidget {
       stream: bloc.toolbarSettingsStream,
       builder:
           (BuildContext context, AsyncSnapshot<ToolbarSettings> snapshot) =>
-              ToolbarView(toolbarSettings: snapshot.data));
+              ToolbarView(
+                toolbarSettings: snapshot.data,
+                onBackButtonPressed: () => bloc.onBackButtonPressed.call(),
+              ));
 }

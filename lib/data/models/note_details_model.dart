@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:todo_sandbox/config/navigation/navigation.dart';
 import 'package:todo_sandbox/core/resourses/data_state.dart';
 import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/note_model.dart';
@@ -37,6 +38,8 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
     final String noteTitle = titleEtc.text;
     final String noteContent = contentEtc.text;
 
+    logInfo('On back btn pressed');
+
     if (noteTitle.isEmpty && noteContent.isEmpty) return;
 
     switch (noteOpenMode) {
@@ -47,6 +50,8 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
         handleUpdateNoteCase(noteTitle, noteContent);
         break;
     }
+
+    Navigation.I.pop();
   }
 
   Future<void> handleCrateNoteCase(String noteTitle, String noteContent) async {
@@ -74,7 +79,8 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
             category: 'common',
             title: noteTitle,
             content: noteContent,
-            createdAt: DateTime.now().millisecondsSinceEpoch,
+            createdAt: currentEditNoteOrNull?.createAt ??
+                DateTime.now().millisecondsSinceEpoch,
             updatedAt: DateTime.now().millisecondsSinceEpoch);
 
         _updateNoteUseCase(params: noteModel);
@@ -115,6 +121,8 @@ class NoteDetailsBloc extends BaseBlocWithArguments<NoteDetailsArgument> {
       arguments?.noteModel != null && currentNoteIdOrNull != null;
 
   int? get currentNoteIdOrNull => arguments?.noteModel?.id;
+
+  NoteModel? get currentEditNoteOrNull => arguments?.noteModel;
 
   @override
   void dispose() {

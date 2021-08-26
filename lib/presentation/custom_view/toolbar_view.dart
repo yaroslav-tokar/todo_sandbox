@@ -5,22 +5,28 @@ import 'package:todo_sandbox/config/theme/styles.dart';
 import 'package:todo_sandbox/core/constants/colors.dart';
 import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 
-const String defaultTitle = 'empty toolbar title';
+const String defaultTitle = '';
 
-class ToolbarView extends StatelessWidget {
-  final VoidCallback? onBackButtonTapped;
+class ToolbarView extends StatefulWidget {
+  final VoidCallback? onBackButtonPressed;
+  final ToolbarSettings? toolbarSettings;
 
   const ToolbarView({
     Key? key,
-    required this.toolbarSettings,
-    this.onBackButtonTapped,
+    this.toolbarSettings,
+    required this.onBackButtonPressed,
   }) : super(key: key);
 
-  final ToolbarSettings? toolbarSettings;
+  @override
+  _ToolbarViewState createState() => _ToolbarViewState();
+}
+
+class _ToolbarViewState extends State<ToolbarView> {
+  final GlobalKey _toolbarBackButtonKey = GlobalKey<_ToolbarViewState>();
 
   @override
   Widget build(BuildContext context) {
-    final String actualTitle = toolbarSettings?.title ?? defaultTitle;
+    final String actualTitle = widget.toolbarSettings?.title ?? defaultTitle;
     final double paddingTop = MediaQuery.of(context).padding.top;
 
     return Padding(
@@ -29,21 +35,33 @@ class ToolbarView extends StatelessWidget {
           height: 52,
           color: primaryColor,
           child: Row(
-            children: [
-              Expanded(flex: 2, child: _buildBackButton()),
-              Expanded(flex: 10, child: _buildTitle(actualTitle)),
-              Expanded(flex: 2, child: _buildBackButton()),
+            children: <Widget>[
+              _buildLeftSection(),
+              _buildCentralSection(actualTitle),
+              buildRightSection(),
             ],
           ),
         ));
   }
 
-  Widget _buildTitle(String title) => Container(
-        color: Colors.yellow,
-        child: GestureDetector(
-          child: Stack(
-            children: <Widget>[
-              SizedBox(
+
+  Expanded buildRightSection() =>
+      const Expanded(flex: 2, child: SizedBox.shrink());
+
+  Expanded _buildCentralSection(String actualTitle) =>
+      Expanded(flex: 10, child: _buildTitle(actualTitle));
+
+  Expanded _buildLeftSection() => Expanded(
+      flex: 2,
+      child: widget!.toolbarSettings!.hasBackButton
+          ? _buildBackButton()
+          : const SizedBox.shrink());
+
+  Widget _buildTitle(String title) => GestureDetector(
+        child: Stack(
+          children: <Widget>[
+            Align(
+              child: SizedBox(
                   height: 52,
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -53,21 +71,38 @@ class ToolbarView extends StatelessWidget {
                           style: defaultToolbarTextStyle)
                     ],
                   )),
-            ],
-          ),
+            ),
+          ],
         ),
       );
 
-  Widget _buildBackButton() => GestureDetector(
-        onTap: () {
-          onBackButtonTapped ?? Navigation.I.pop();
-        },
-        child: const Padding(
-            padding: EdgeInsets.only(left: 14),
-            child: Icon(
-              Icons.arrow_back,
+  Widget _buildLeftSideCustomWidget() => Material(
+        color: Colors.transparent,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+            splashColor: Colors.white,
+            onTap: widget?.onBackButtonPressed ?? Navigation.I.pop,
+            child: const Icon(
+              Icons.close,
               size: 28,
               color: Colors.white,
             )),
+      );
+
+  Widget _buildBackButton() => Material(
+        key: GlobalKey(),
+        color: Colors.transparent,
+        shape: const CircleBorder(),
+        clipBehavior: Clip.hardEdge,
+        child: InkWell(
+          splashColor: Colors.white,
+          onTap: widget?.onBackButtonPressed ?? Navigation.I.pop,
+          child: const Icon(
+            Icons.arrow_back,
+            size: 28,
+            color: Colors.white,
+          ),
+        ),
       );
 }

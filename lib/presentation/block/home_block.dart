@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/cupertino.dart';
 import 'package:todo_sandbox/config/navigation/navigation.dart';
 import 'package:todo_sandbox/config/route/router.dart';
 import 'package:todo_sandbox/core/util/logger.dart';
@@ -23,6 +24,12 @@ class HomeBlock extends BaseBloc {
     } else {
       _selectedNoteList.remove(noteModel);
     }
+  }
+
+  Future<void> handleToolbarState() async {
+    final currentToolbarSettingsState = toolbarCurrentSettings;
+
+    updateToolbarSettings(currentToolbarSettingsState);
   }
 
   Future<void> onNoteTapped(NoteModel noteModel) async {
