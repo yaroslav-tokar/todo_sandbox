@@ -9,16 +9,20 @@ import 'package:todo_sandbox/data/models/note_open_mode.dart';
 import 'package:todo_sandbox/domain/use_case/note_use_case/get_all_notes_steram_use_case.dart';
 import 'package:todo_sandbox/presentation/arguments/note_details_arguments.dart';
 import 'package:todo_sandbox/presentation/block/base/base_block.dart';
+import 'package:todo_sandbox/presentation/custom_view/toolbar_view.dart';
 
 class HomeBlock extends BaseBloc {
   HomeBlock(this._getAllNotesStreamUseCase);
 
+  final GlobalKey<ToolbarViewState> toolbarController =
+      GlobalKey<ToolbarViewState>();
   final List<NoteModel> _selectedNoteList = <NoteModel>[];
 
   final GetAllNotesStreamUseCase _getAllNotesStreamUseCase;
 
   Future<void> onNoteLongPressed(NoteModel noteModel) async {
     logInfo('OnLongPressHappen');
+
     if (!_selectedNoteList.contains(noteModel)) {
       _selectedNoteList.add(noteModel);
     } else {

@@ -7,6 +7,7 @@ import 'package:todo_sandbox/core/usecase/use_case.dart';
 import 'package:todo_sandbox/data/enums.dart';
 import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 import 'package:todo_sandbox/data/network/api_components.dart';
+import 'package:todo_sandbox/presentation/custom_view/toolbar_view.dart';
 
 typedef OnSuccess = Function<T>(T? data);
 typedef OnError = Function(ResponseError errorMessage);
@@ -84,8 +85,11 @@ abstract class BaseBloc with ToolbarConfigMixin {
 
   Future<void> onBackButtonPressed() async {}
 
+
+  GlobalKey<ToolbarViewState>? get toolbarKey => null;
+
   void dispose() {
-    disposeToolbar();
+    disposeToolbarStreams();
     _screenViewStateSc.close();
     _progressViewStateSc.close();
     lastCallableFunction = null;

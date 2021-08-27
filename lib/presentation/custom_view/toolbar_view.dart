@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:todo_sandbox/config/navigation/navigation.dart';
 import 'package:todo_sandbox/config/theme/styles.dart';
 import 'package:todo_sandbox/core/constants/colors.dart';
+import 'package:todo_sandbox/core/util/logger.dart';
 import 'package:todo_sandbox/data/models/toolbar_settings.dart';
 
 const String defaultTitle = '';
@@ -12,18 +12,15 @@ class ToolbarView extends StatefulWidget {
   final ToolbarSettings? toolbarSettings;
 
   const ToolbarView({
-    Key? key,
     this.toolbarSettings,
-    required this.onBackButtonPressed,
-  }) : super(key: key);
+    this.onBackButtonPressed,
+  });
 
   @override
-  _ToolbarViewState createState() => _ToolbarViewState();
+  ToolbarViewState createState() => ToolbarViewState();
 }
 
-class _ToolbarViewState extends State<ToolbarView> {
-  final GlobalKey _toolbarBackButtonKey = GlobalKey<_ToolbarViewState>();
-
+class ToolbarViewState extends State<ToolbarView> {
   @override
   Widget build(BuildContext context) {
     final String actualTitle = widget.toolbarSettings?.title ?? defaultTitle;
@@ -44,6 +41,10 @@ class _ToolbarViewState extends State<ToolbarView> {
         ));
   }
 
+  Future<void> hideBackButtonAndShowCloseButton() async {
+    setState(() {});
+    logInfo('Start to change state');
+  }
 
   Expanded buildRightSection() =>
       const Expanded(flex: 2, child: SizedBox.shrink());
@@ -53,7 +54,7 @@ class _ToolbarViewState extends State<ToolbarView> {
 
   Expanded _buildLeftSection() => Expanded(
       flex: 2,
-      child: widget!.toolbarSettings!.hasBackButton
+      child: widget.toolbarSettings!.hasBackButton
           ? _buildBackButton()
           : const SizedBox.shrink());
 
@@ -76,13 +77,13 @@ class _ToolbarViewState extends State<ToolbarView> {
         ),
       );
 
-  Widget _buildLeftSideCustomWidget() => Material(
+  Widget _buildCloseButton() => Material(
         color: Colors.transparent,
         shape: const CircleBorder(),
         clipBehavior: Clip.hardEdge,
         child: InkWell(
             splashColor: Colors.white,
-            onTap: widget?.onBackButtonPressed ?? Navigation.I.pop,
+            onTap: widget.onBackButtonPressed,
             child: const Icon(
               Icons.close,
               size: 28,
@@ -97,7 +98,7 @@ class _ToolbarViewState extends State<ToolbarView> {
         clipBehavior: Clip.hardEdge,
         child: InkWell(
           splashColor: Colors.white,
-          onTap: widget?.onBackButtonPressed ?? Navigation.I.pop,
+          onTap: _onBackButtonPressed,
           child: const Icon(
             Icons.arrow_back,
             size: 28,
@@ -105,4 +106,8 @@ class _ToolbarViewState extends State<ToolbarView> {
           ),
         ),
       );
+
+  Future<void> _onBackButtonPressed() async {
+    widget.onBackButtonPressed?.call();
+  }
 }

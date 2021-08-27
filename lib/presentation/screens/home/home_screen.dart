@@ -19,7 +19,9 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   @override
   Widget build(BuildContext context) => BaseScreenView<HomeBlock>(
       bloc: bloc,
-      toolbarSettings: ToolbarSettings(title: 'Notes'),
+      toolbarSettings: ToolbarSettings(
+        title: 'Notes',
+      ),
       onFloatingActionButtonTapped: bloc.onFloatingActionButtonClicked,
       content: buildBody);
 
@@ -31,8 +33,10 @@ class _HomeScreenState extends BaseState<HomeBlock, HomeScreen> {
   Widget _buildNoteList() => StreamBuilder<List<NoteModel>>(
       stream: bloc.notesStream,
       initialData: [],
-      builder: (BuildContext context,
-              AsyncSnapshot<List<NoteModel>> snapshot) =>
+      builder: (
+        BuildContext context,
+        AsyncSnapshot<List<NoteModel>> snapshot,
+      ) =>
           StaggeredGridView.countBuilder(
               staggeredTileBuilder: (int index) => const StaggeredTile.fit(1),
               itemBuilder: (BuildContext context, int index) => NoteView(

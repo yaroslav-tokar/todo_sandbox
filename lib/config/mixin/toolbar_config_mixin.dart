@@ -26,7 +26,7 @@ class ToolbarConfigMixin {
   @protected
   ToolbarSettings get toolbarCurrentSettings => _toolbarSettingsSc.value;
 
-  void disposeToolbar() {
+  void disposeToolbarStreams() {
     _toolbarSettingsSc.close();
   }
 }
