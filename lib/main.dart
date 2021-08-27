@@ -1,37 +1,22 @@
-import 'dart:io';
-
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:todo_sandbox/di/di.dart';
-import 'package:todo_sandbox/screens/app.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
-import 'package:todo_sandbox/util/logger.dart';
-import 'package:todo_sandbox/core/model/dbo/note_dbo.dart';
+import 'package:flutter/services.dart';
+import 'package:todo_sandbox/core/constants/colors.dart';
+import 'package:todo_sandbox/presentation/di/di.dart';
+import 'package:todo_sandbox/presentation/screens/app.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  //Init Hive db
-  await _initHive();
+
+  //Init theme
+  await initTheme();
   //Init dependency injection
   await _initDi();
 
-  runApp(App());
-}
-
-Future<void> _initHive() async {
-  try {
-    final Directory? directory =
-        await pathProvider.getApplicationDocumentsDirectory();
-    if (directory != null) {
-      Hive.init(directory.path);
-      Hive.registerAdapter(NoteDboAdapter());
-    }
-  } catch (e) {
-    Logger.e('Cant init Hive, cause\t$e');
-  }
+  runApp(const App());
 }
 
 Future<void> _initDi() async => await setupDi();
 
 //Future<void> _initFirebase() async => await Firebase.initializeApp();
+Future<void> initTheme() async => SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(statusBarColor: primaryColor));
